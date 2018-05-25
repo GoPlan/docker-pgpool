@@ -10,14 +10,17 @@ RUN yum update -y \
 && yum install -y ${pgpool_rpm}
 
 ENV PGPOOL_USER=pgpool
-ENV PGPOOL_HOME=/usr/local/pgpool
+ENV PGPOOL_HOME=/etc/pgpool-II
 ENV PGPOOL_RUN=/var/run/pgpool
-RUN adduser -U -md ${PGPOOL_HOME} ${PGPOOL_USER} \
-&& chown ${PGPOOL_USER} ${PGPOOL_RUN}
+ENV PGPOOL_LOG=/var/log/pgpool
+RUN mkdir ${PGPOOL_LOG} \ 
+&& adduser --user-group ${PGPOOL_USER} \
+&& usermod --home ${PGPOOL_HOME} ${PGPOOL_USER} \
+&& chown -R ${PGPOOL_USER} ${PGPOOL_RUN} ${PGPOOL_LOG} ${PGPOOL_HOME}
 
 USER ${PGPOOL_USER}
 
-COPY pgpool-II ${PGPOOL_HOME} 
+WORKDIR ${PGPOOL_HOME}
 
 EXPOSE 9999
 EXPOSE 9898
