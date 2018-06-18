@@ -25,4 +25,5 @@ WORKDIR ${PGPOOL_HOME}
 EXPOSE 9999
 EXPOSE 9898
 
-CMD ["pgpool", "-n"]
+#CMD ["pgpool", "-n"]
+CMD ["/bin/bash"]
